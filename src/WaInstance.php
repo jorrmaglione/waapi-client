@@ -144,7 +144,7 @@ final class WaInstance {
             'chatId' => $chatId,
             'mediaBase64' => base64_encode($bytes),
             'mediaName' => $filename ?? basename($filePath),
-            'caption' => $caption,
+            'mediaCaption' => $caption,
         ]);
     }
 
