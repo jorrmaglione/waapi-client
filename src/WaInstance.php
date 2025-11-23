@@ -42,7 +42,20 @@ final class WaInstance {
     }
 
     /**
-     * @return array
+     * @return array{
+     *     status: string,
+     *     clientStatus: array{
+     *          status: string,
+     *          instanceId: int,
+     *          data: null,
+     *          instanceStatus: string,
+     *          instanceWebhook: string,
+     *          instanceEvents: array
+     *     },
+     *     links: array{
+     *          self: string
+     *     }
+     * }
      */
     public function getStatus(): array {
         return $this->api->request('GET', "instances/$this->instanceId/client/status");
@@ -56,41 +69,24 @@ final class WaInstance {
     }
 
     /**
-     * @return array
+     * @return array{
+     *      status: string,
+     *      qrCode: array{
+     *          status: string,
+     *          instanceId: int,
+     *          instanceStatus: string,
+     *          data?: array{
+     *              qr: string,
+     *              qr_code: string
+     *          }
+     *      },
+     *      links: array{
+     *          self: string
+     *      }
+     * }
      */
-    public function instanceStatus(): array {
-        $res = $this->api->request('GET', "instances/$this->instanceId/client/status");
-
-        if (isset($res['status']) && $res['status'] !== 'success')
-            return [];
-
-        if (empty($res['clientStatus']))
-            return [];
-
-        return $res['clientStatus'];
-    }
-
-    /**
-     * @return void
-     */
-    public function retrieveQRCode(): void {
-        /** @var array{
-         *     status: string,
-         *     links: array,
-         *     qrCode: array{
-         *          status:string,
-         *          instanceId: int,
-         *          data: array{
-         *              qr_code: string
-         *          }
-         *     }
-        } $res
-         */
-        $res = $this->api->request('GET', "instances/$this->instanceId/client/qr");
-        if (isset($res['status']) && $res['status'] !== 'success') {
-            throw new RuntimeException("Failed to retrieve QR code: {$res['message']}");
-        }
-        echo $res['qrCode']['data']['qr_code'];
+    public function retrieveQRCode(): array {
+        return $this->api->request('GET', "instances/$this->instanceId/client/qr");
     }
 
     /**
