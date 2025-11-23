@@ -48,10 +48,16 @@ final class WaInstance {
         return $this->api->request('GET', "instances/$this->instanceId/client/status");
     }
 
+    /**
+     * @return bool
+     */
     public function isReady(): bool {
         return $this->getStatus()['clientStatus']["instanceStatus"] === 'ready';
     }
 
+    /**
+     * @return array
+     */
     public function instanceStatus(): array {
         $res = $this->api->request('GET', "instances/$this->instanceId/client/status");
 
@@ -64,9 +70,27 @@ final class WaInstance {
         return $res['clientStatus'];
     }
 
+    /**
+     * @return void
+     */
     public function retrieveQRCode(): void {
+        /** @var array{
+         *     status: string,
+         *     links: array,
+         *     qrCode: array{
+         *          status:string,
+         *          instanceId: int,
+         *          data: array{
+         *              qr_code: string
+         *          }
+         *     }
+        } $res
+         */
         $res = $this->api->request('GET', "instances/$this->instanceId/client/qr");
-        var_dump($res);
+        if (isset($res['status']) && $res['status'] !== 'success') {
+            throw new RuntimeException("Failed to retrieve QR code: {$res['message']}");
+        }
+        echo $res['qrCode']['data']['qr_code'];
     }
 
     /**
