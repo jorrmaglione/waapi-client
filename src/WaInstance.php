@@ -162,7 +162,7 @@ final class WaInstance {
         return $this->api->request('POST', "instances/{$this->instanceId}/client/action/send-media", [
             'chatId' => $chatId,
             'mediaUrl' => $url,
-            'caption' => $caption,
+            'mediaCaption' => $caption,
         ]);
     }
 }

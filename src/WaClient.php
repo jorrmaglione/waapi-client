@@ -48,8 +48,8 @@ final class WaClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => strtoupper($method),
             CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_TIMEOUT => 20,
-            CURLOPT_CONNECTTIMEOUT => 10
+            CURLOPT_TIMEOUT => 200,
+            CURLOPT_CONNECTTIMEOUT => 100
         ]);
 
         if ($json !== null)
